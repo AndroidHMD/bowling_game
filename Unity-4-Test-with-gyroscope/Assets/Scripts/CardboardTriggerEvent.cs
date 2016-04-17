@@ -5,14 +5,12 @@ using System.Collections.Generic;
 public class CardboardTriggerEvent : MonoBehaviour {
 
 	public Cardboard myCardboard;
-	private GameObject projectile;
+	public GameObject projectile;
 	private List<GameObject> myBowlingBalls = new List<GameObject>();
+    private float rollingVelocity = 10;
 
 	void Start() {
-		// Disable screen dimming:
-		Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
-		projectile = GameObject.FindGameObjectWithTag("projectile");
 	} 
 
 	void Update () {
@@ -21,23 +19,30 @@ public class CardboardTriggerEvent : MonoBehaviour {
 			Debug.Log("Button was clicked");
 			 sendNewBall();
 		}
+
 		foreach (GameObject ball in myBowlingBalls) {
-			if (ball.transform.position.magnitude < 60) {
-				ball.transform.position += ball.transform.forward * 5;
+            float dis = Vector3.Distance(myCardboard.transform.position, ball.transform.position);
+            if (dis < 60) {
+                float move = rollingVelocity * Time.deltaTime;
+                ball.transform.Translate(transform.forward * move);
+                
 			} 
 			else {
 				myBowlingBalls.Remove (ball);
+                Destroy(gameObject);
 			}
 		}
-	}
+
+    }
 
 	void sendNewBall(){
-		GameObject player = GameObject.FindGameObjectWithTag("player");
-		GameObject newBall = Instantiate (projectile) as GameObject;
-		newBall.transform.position = player.transform.position;
-		newBall.transform.rotation = player.transform.rotation;
-		myBowlingBalls.Add (newBall);
+        //GameObject player = GameObject.FindGameObjectWithTag("Player");
+        //GameObject newBall = Instantiate (projectile) as GameObject;
+        //newBall.transform.position = myCardboard.transform.position;
+        //newBall.transform.rotation = Cardboard.SDK.HeadPose.Orientation;
+
+        Instantiate(projectile, myCardboard.transform.position, Cardboard.SDK.HeadPose.Orientation);
+        myBowlingBalls.Add (projectile);
 
 	}
 }
-

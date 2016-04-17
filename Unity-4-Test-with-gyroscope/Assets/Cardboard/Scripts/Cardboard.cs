@@ -770,5 +770,5 @@ public class Cardboard : MonoBehaviour {
 		}
 	}
 	[SerializeField]
-	private bool trackingFound = true;
+	private bool trackingFound = false;
 }

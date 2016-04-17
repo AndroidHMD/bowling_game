@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class playerHit : MonoBehaviour {
+public class playerHit : MonoBehaviour
+{
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    void OnCollisionEnter(Collision col)
+    {
+        if(col.gameObject.name == "projectile")
+        {
+            Debug.Log("Player was hit!");
+            Destroy(col.gameObject);
+        }
+    }
 }
