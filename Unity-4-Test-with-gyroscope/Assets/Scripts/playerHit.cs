@@ -6,7 +6,7 @@ public class playerHit : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        if(col.gameObject.name == "projectile")
+        if(col.gameObject.tag == "projectile")
         {
             Debug.Log("Player was hit!");
             Destroy(col.gameObject);

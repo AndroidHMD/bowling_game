@@ -6,8 +6,8 @@ public class CardboardTriggerEvent : MonoBehaviour {
 
 	public Cardboard myCardboard;
 	public GameObject projectile;
-	private List<GameObject> myBowlingBalls = new List<GameObject>();
-    private float rollingVelocity = 10;
+	//private List<GameObject> myBowlingBalls = new List<GameObject>();
+    private float rollingForce = 500;
 
 	void Start() {
 
@@ -17,32 +17,24 @@ public class CardboardTriggerEvent : MonoBehaviour {
 		//True for only one frame
 		if(myCardboard.Triggered) {
 			Debug.Log("Button was clicked");
-			 sendNewBall();
+
+			GameObject tempBall;
+			//tempBall = Instantiate (projectile, myCardboard.transform.position, Cardboard.SDK.HeadPose.Orientation) as GameObject;
+			tempBall = Instantiate (projectile, transform.position, transform.rotation) as GameObject;
+
+			Rigidbody tempBody;
+			tempBody = tempBall.GetComponent<Rigidbody> ();
+
+			float move = rollingForce * Time.deltaTime;
+			tempBody.AddForce (tempBall.transform.forward * rollingForce);
+
+			//Destroy ball after 10 seconds
+			Destroy (tempBall, 8);
+
 		}
 
-		foreach (GameObject ball in myBowlingBalls) {
-            float dis = Vector3.Distance(myCardboard.transform.position, ball.transform.position);
-            if (dis < 60) {
-                float move = rollingVelocity * Time.deltaTime;
-                ball.transform.Translate(transform.forward * move);
-                
-			} 
-			else {
-				myBowlingBalls.Remove (ball);
-                Destroy(gameObject);
-			}
-		}
 
     }
 
-	void sendNewBall(){
-        //GameObject player = GameObject.FindGameObjectWithTag("Player");
-        //GameObject newBall = Instantiate (projectile) as GameObject;
-        //newBall.transform.position = myCardboard.transform.position;
-        //newBall.transform.rotation = Cardboard.SDK.HeadPose.Orientation;
-
-        Instantiate(projectile, myCardboard.transform.position, Cardboard.SDK.HeadPose.Orientation);
-        myBowlingBalls.Add (projectile);
-
-	}
 }
+
